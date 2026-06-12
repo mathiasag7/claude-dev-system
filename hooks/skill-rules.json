@@ -1,0 +1,133 @@
+{
+  "max_suggestions_per_prompt": 2,
+  "skills": {
+    "debugging-skill": {
+      "file": ".claude/skills/debugging-skill.md",
+      "priority": 10,
+      "keywords": [
+        "bug", "fix", "broken", "crash", "crashes", "error", "exception",
+        "doesn't work", "does not work", "not working", "fails", "failing",
+        "wrong result", "wrong value", "500", "stack trace", "traceback",
+        "regression", "reproduce"
+      ],
+      "patterns": [
+        "(fix|debug|investigate|diagnose).{0,40}(bug|issue|error|problem|crash)",
+        "why (is|does|do|isn'?t|doesn'?t).{0,60}(fail|break|crash|wrong|error)"
+      ],
+      "instruction": "Read .claude/skills/debugging-skill.md before writing any fix. Begin with the Step 0 bug statement block (OBSERVED / EXPECTED / TRIGGER / FREQUENCY / FIRST SEEN / SCOPE). Reproduce before investigating. No fix without a regression test."
+    },
+    "testing-skill": {
+      "file": ".claude/skills/testing-skill.md",
+      "priority": 8,
+      "keywords": [
+        "test", "tests", "unit test", "integration test", "e2e", "coverage",
+        "test suite", "pytest", "jest", "assertion", "mock", "fixture",
+        "regression test", "flaky"
+      ],
+      "patterns": [
+        "(write|add|review|fix|improve).{0,30}tests?",
+        "tests? (are|is|keeps?).{0,30}(fail|break|flak)"
+      ],
+      "instruction": "Read .claude/skills/testing-skill.md before writing any test. Begin with the Step 0 behavior specification (GIVEN / WHEN / THEN / NOT). Specify behavior, not implementation. In financial/batch contexts, lenses L1 and L3 (business logic, concurrency/idempotency) are forced."
+    },
+    "backend-skill": {
+      "file": ".claude/skills/backend-skill.md",
+      "priority": 7,
+      "keywords": [
+        "endpoint", "api", "route", "service", "business logic", "business rule",
+        "batch", "cron", "scheduled", "background job", "worker", "queue",
+        "webhook", "state transition", "status change", "calculation",
+        "transaction", "persistence", "repository"
+      ],
+      "patterns": [
+        "(implement|add|create|build|modify|change).{0,50}(endpoint|api|route|job|worker|service|business (rule|logic)|calculation|state)",
+        "(approve|cancel|close|activate|disburse|settle).{0,40}(flow|logic|process)"
+      ],
+      "instruction": "Read .claude/skills/backend-skill.md before implementing. Begin with the Step 0 operation block (OPERATION / INPUT / OUTPUT / FAILURE / SIDE EFFECTS). If FAILURE or SIDE EFFECTS would be empty for a non-trivial operation, stop and investigate first."
+    },
+    "frontend-ui-skill": {
+      "file": ".claude/skills/frontend-ui-skill.md",
+      "priority": 6,
+      "keywords": [
+        "component", "screen", "page layout", "ui", "button", "modal", "card",
+        "table", "list view", "design system", "css", "tailwind", "style",
+        "styling", "responsive", "skeleton", "empty state", "dark mode"
+      ],
+      "patterns": [
+        "(build|create|add|implement|modify|update).{0,40}(component|screen|page|view|modal|widget|layout)",
+        "(style|restyle|theme).{0,40}(page|component|screen|app)"
+      ],
+      "instruction": "Read .claude/skills/frontend-ui-skill.md before building. Begin with the Step 0 component contract (COMPONENT / INPUT / OUTPUT / STATES / VARIANTS) and the state matrix. A component whose only state is 'success' is not ready to implement."
+    },
+    "frontend-ux-skill": {
+      "file": ".claude/skills/frontend-ux-skill.md",
+      "priority": 6,
+      "keywords": [
+        "flow", "user flow", "form", "wizard", "multi-step", "onboarding flow",
+        "ux", "user journey", "checkout", "signup", "sign up", "registration",
+        "confirmation dialog", "validation message", "user experience"
+      ],
+      "patterns": [
+        "(design|build|improve|rework|create).{0,40}(flow|form|wizard|journey|signup|checkout|onboarding)",
+        "users? (can'?t|cannot|struggle|get stuck|confused|abandon)"
+      ],
+      "instruction": "Read .claude/skills/frontend-ux-skill.md before designing. Begin with the Step 0 task definition (USER GOAL / START STATE / END STATE / FAILURE MODES / USER TYPE). If FAILURE MODES is empty, stop — name them before designing the happy path."
+    },
+    "feature-design-skill": {
+      "file": ".claude/skills/feature-design-skill.md",
+      "priority": 5,
+      "keywords": [
+        "new feature", "design a feature", "feature design", "spec", "specification",
+        "how should we build", "approach for", "architecture for", "plan the feature"
+      ],
+      "patterns": [
+        "(design|plan|spec|think through|propose).{0,40}(feature|functionality|capability)",
+        "(add|build|implement) (a|the) new .{0,40}(feature|module|capability)"
+      ],
+      "instruction": "Read .claude/skills/feature-design-skill.md before making any implementation decision. Research the existing codebase first; per CLAUDE.md 1.1, a proposal made without reading the existing code is a guess."
+    },
+    "architecture-refactoring-skill": {
+      "file": ".claude/skills/architecture-refactoring-skill.md",
+      "priority": 5,
+      "keywords": [
+        "refactor", "refactoring", "migrate", "migration", "technical debt",
+        "tech debt", "restructure", "decouple", "extract", "cleanup", "clean up",
+        "reorganize", "rewrite", "modularize", "split the"
+      ],
+      "patterns": [
+        "(refactor|restructure|migrate|decouple|extract|modulariz).{0,60}",
+        "(reduce|pay down|address).{0,30}(debt|coupling|duplication)"
+      ],
+      "instruction": "Read .claude/skills/architecture-refactoring-skill.md before changing any structure. Behavior must be pinned by tests before the refactor begins. Refactoring without a safety net is rewriting."
+    },
+    "design-audit-skill": {
+      "file": ".claude/skills/design-audit-skill.md",
+      "priority": 9,
+      "keywords": [
+        "messy design", "inconsistent design", "inconsistent ui", "design audit",
+        "redesign", "visual debt", "design is bad", "ugly", "looks bad",
+        "design cleanup", "unify the design", "harmonize", "design overhaul",
+        "fix the design", "improve the design"
+      ],
+      "patterns": [
+        "(audit|fix|clean|unify|harmoniz|overhaul|moderniz|improve).{0,40}(design|ui|look|style|visual)",
+        "(design|ui|styles?|look).{0,50}(is|are|looks?|seems?|feels?).{0,40}(mess|inconsistent|inaccurate|bad|ugly|broken|outdated|all over|not (good|great|consistent))",
+        "(design|ui|visual).{0,40}(debt|audit|cleanup|clean.?up|remediation)",
+        "(inconsistent|messy|ugly|outdated).{0,40}(design|ui|styles?|pages?|screens?)"
+      ],
+      "instruction": "Read .claude/skills/design-audit-skill.md. This is remediation work, not new-build work — do NOT start restyling pages. Begin with Phase 0 (establish visual access) and Phase 1 (inventory). No page is modified before the canonical system is confirmed by the human."
+    },
+    "project-onboarding-skill": {
+      "file": ".claude/skills/project-onboarding-skill.md",
+      "priority": 9,
+      "keywords": [
+        "new project", "onboard", "onboarding the project", "project.md",
+        "initialize the project", "first session", "set up the project context"
+      ],
+      "patterns": [
+        "(initialize|init|set ?up|bootstrap).{0,30}(project|context|project\\.md)"
+      ],
+      "instruction": "Read .claude/skills/project-onboarding-skill.md. Determine greenfield vs existing first. For existing projects: read the codebase and build the inference map BEFORE asking the human anything."
+    }
+  }
+}
