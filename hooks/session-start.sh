@@ -28,18 +28,27 @@ elif [[ ! -s "$PROJECT_MD" ]]; then
   problem="PROJECT.md exists but is empty."
 else
   # Fewer than 30 non-empty lines = almost certainly an unfilled skeleton
-  lines=$(grep -c -v '^[[:space:]]*$' "$PROJECT_MD" 2>/dev/null || echo 0)
-  if [[ "$lines" -lt 30 ]]; then
+  lines=$(grep -c -v '^[[:space:]]*$' "$PROJECT_MD" 2>/dev/null)
+  if [[ "${lines:-0}" -lt 30 ]]; then
     problem="PROJECT.md has only $lines non-empty lines — it appears to be an unfilled skeleton."
-  # Common placeholder markers
+  # Generic placeholder markers
   elif grep -q -E '\[(TODO|TBD|FILL|fill me|placeholder|à remplir|a remplir)\]|<!-- *(TODO|TBD|FILL)|\[\.\.\.\]|_____' "$PROJECT_MD" 2>/dev/null; then
     problem="PROJECT.md still contains placeholder markers (TODO/TBD/FILL/...)."
+  # Template-specific placeholders: the stock PROJECT.md template uses [e.g. ...],
+  # [Term], [DATE], [Constraint], [Add ...] and blank fields after "PROJECT NAME:".
+  # Count them — a filled file has zero or near-zero; the raw template has dozens.
+  else
+    tpl_count=$(grep -c -E '\[e\.g\.|\[Term\]|\[DATE\]|\[Constraint( —)?\]|\[Add |\[one sentence|\[precise definition\]|\[what (situation|alternatives)' "$PROJECT_MD" 2>/dev/null)
+    name_empty=$(grep -c -E '^PROJECT NAME:[[:space:]]*$' "$PROJECT_MD" 2>/dev/null)
+    if [[ "${tpl_count:-0}" -ge 3 || "${name_empty:-0}" -ge 1 ]]; then
+      problem="PROJECT.md still contains $tpl_count unfilled template placeholders ([e.g. ...], [Term], [DATE], ...)${name_empty:+ and PROJECT NAME is empty}."
+    fi
   fi
 fi
 
 if [[ -n "$problem" ]]; then
   cat <<EOF
-[PROJECT CONTEXT GATE — injected by SessionStart hook, per CLAUDE.md Part 4]
+[PROJECT CONTEXT GATE — injected by SessionStart hook, per CLAUDE.md Part 3]
 $problem
 
 Before ANY development task in this session:

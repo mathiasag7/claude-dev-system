@@ -126,7 +126,7 @@ const repeats = selected.filter((m) => state.suggested.includes(m.name));
 const lines = [];
 
 if (fresh.length > 0) {
-  lines.push("[SKILL ACTIVATION — injected by hook, per CLAUDE.md §1.3]");
+  lines.push("[SKILL ACTIVATION — injected by hook, per CLAUDE.md §1.2]");
   for (const m of fresh) {
     lines.push("");
     lines.push(`Task matches: ${m.name}  (${m.skill.file})`);

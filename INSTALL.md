@@ -7,14 +7,29 @@ hooks make skill activation and the PROJECT.md gate mechanical instead of volunt
 
 ```
 .claude/
+├── CLAUDE.md                         ← shrunk universal rules (replaces your 184-line version)
 ├── settings.json                     ← wires both hooks (merge if you already have one)
 ├── hooks/
 │   ├── skill-activation.mjs          ← UserPromptSubmit: injects skill instructions per prompt
 │   ├── skill-rules.json              ← triggers per skill — the only file you maintain
 │   └── session-start.sh              ← SessionStart: enforces the PROJECT.md gate
 └── skills/
-    └── design-audit-skill.md         ← new remediation skill (messy existing designs)
+    ├── design-audit-skill.md         ← new remediation skill (messy existing designs)
+    ├── sk-onboard/SKILL.md              ← /sk-onboard         → project-onboarding-skill.md
+    ├── sk-design-audit/SKILL.md         ← /sk-design-audit    → design-audit-skill.md
+    ├── sk-feature-design/SKILL.md       ← /sk-feature-design  → feature-design-skill.md
+    ├── sk-backend/SKILL.md              ← /sk-backend         → backend-skill.md
+    ├── sk-frontend-ui/SKILL.md          ← /sk-frontend-ui     → frontend-ui-skill.md
+    ├── sk-frontend-ux/SKILL.md          ← /sk-frontend-ux     → frontend-ux-skill.md
+    ├── sk-testing/SKILL.md              ← /sk-testing         → testing-skill.md
+    ├── sk-debugging/SKILL.md            ← /sk-debugging       → debugging-skill.md
+    └── sk-refactor/SKILL.md             ← /sk-refactor        → architecture-refactoring-skill.md
 ```
+
+Each `<name>/SKILL.md` is a thin launcher: typing /<name> (or Claude auto-loading it
+from its description) instructs Claude to read the corresponding flat *-skill.md in
+full. Your flat files stay the single source of truth; launchers never duplicate them.
+Your 8 original flat skill files go in .claude/skills/ next to the launcher folders.
 
 ## Install
 
@@ -43,7 +58,13 @@ hooks make skill activation and the PROJECT.md gate mechanical instead of volunt
 - The dedup cache lives in `.claude/.cache/skill-hook/` — add it to `.gitignore`.
   Delete it anytime to reset reminders.
 
-## CLAUDE.md patch
+## CLAUDE.md
+
+The shrunk CLAUDE.md in this package replaces your original (105 vs 184 lines).
+All 11 behavioral rules survive (1.1+1.2 merged); the skill table and Part 4 gate
+are now enforced by the hooks. Keep your original somewhere if you want to diff.
+
+## Old CLAUDE.md patch (only if you keep your original instead)
 
 Add one row to the §1.3 skill table:
 
