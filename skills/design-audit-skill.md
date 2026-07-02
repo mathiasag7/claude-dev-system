@@ -47,11 +47,18 @@ Design quality is a *visual* judgment. Code alone reveals token inconsistency an
 
 ```
 VISUAL ACCESS LEVEL:
-  A — Rendered access: a browser tool (e.g. Playwright MCP) is available;
-      pages can be rendered, screenshotted, and inspected at multiple viewports.
+  A — Rendered access: a browser/devtools MCP is available; pages can be
+      rendered, screenshotted, and inspected at multiple viewports.
   B — Static access: the human provides screenshots of the key pages.
   C — Code-only: no rendering, no screenshots.
 ```
+
+**Selecting the rendering tool (Level A).** Do not hardcode one product. Choose in this order:
+1. If a Chrome DevTools MCP is available, use it.
+2. Otherwise use whatever browser/rendering MCP is available (e.g. Playwright MCP).
+3. If none is available and you cannot tell which the project uses, **ask the human** which tool to use — or ask them to provide screenshots (falling back to Level B), or confirm this is Level C. Do not guess at a tool name.
+
+If PROJECT.md records a canonical visual-testing tool (see Technical Stack / Established Patterns), use that without re-asking. Otherwise, once resolved, propose recording it in PROJECT.md so future sessions don't re-ask.
 
 **Rules per level:**
 - **Level A:** Screenshot every page in the page census (Phase 1) at desktop and mobile widths, before any change. These are the audit baseline and the migration before/after evidence.
