@@ -9,6 +9,11 @@
  * Behavior:
  *   - First match of a skill in a session  -> full activation instruction
  *   - Repeat match in the same session     -> one-line reminder (low noise)
+ *   - `no-scan` / `full-scan` / `scan-complet` anywhere in the prompt
+ *                                          -> deterministic [MODE OVERRIDE]
+ *                                             block for product-thinking-skill,
+ *                                             emitted on every such prompt
+ *                                             (never deduplicated)
  *   - No match                             -> silent (exit 0, no output)
  *
  * State is kept per-session in .claude/.cache/skill-hook/<session_id>.json
@@ -51,6 +56,20 @@ try {
 
 const prompt = String(payload.prompt ?? "").toLowerCase();
 if (!prompt.trim()) process.exit(0);
+
+// ---------------------------------------------------------------------------
+// 1b. Deterministic mode-override detection (consumed by product-thinking-skill)
+//     Detected HERE, mechanically — not left to the model's reading of the
+//     prompt. `no-scan` wins over `full-scan` if both are present (explicit
+//     opt-out beats opt-in). Accepts hyphen/space/plain variants and the
+//     French `scan-complet`.
+// ---------------------------------------------------------------------------
+let scanMode = null;
+if (/(^|[^a-z0-9])no[-_ ]?scan([^a-z0-9]|$)/i.test(prompt)) {
+  scanMode = "no-scan";
+} else if (/(^|[^a-z0-9])(full[-_ ]?scan|scan[-_ ]?complet)([^a-z0-9]|$)/i.test(prompt)) {
+  scanMode = "full-scan";
+}
 
 const sessionId = String(payload.session_id ?? "default").replace(/[^a-zA-Z0-9_-]/g, "");
 const projectDir =
@@ -100,7 +119,7 @@ for (const [name, skill] of Object.entries(rules.skills ?? {})) {
   }
 }
 
-if (matches.length === 0) process.exit(0);
+if (matches.length === 0 && !scanMode) process.exit(0);
 
 matches.sort((a, b) => b.score - a.score || b.priority - a.priority);
 const selected = matches.slice(0, maxSuggestions);
@@ -145,6 +164,22 @@ if (repeats.length > 0) {
     `[SKILL REMINDER] Still in scope for this task type: ${repeats
       .map((m) => m.name)
       .join(", ")}. Their processes remain mandatory, including verification blocks and regression tests.`
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 5b. Mode override — emitted on EVERY prompt where a mode keyword appears
+//     (per-prompt, not per-session: the dedup cache does not apply to it).
+//     Emitted even if no skill matched, since the user explicitly typed the
+//     override and product-thinking may be loaded via its launcher instead.
+// ---------------------------------------------------------------------------
+if (scanMode) {
+  if (lines.length > 0) lines.push("");
+  lines.push(
+    `[MODE OVERRIDE — detected deterministically by hook] Impact Scan mode for product-thinking-skill: ${scanMode}. ` +
+      (scanMode === "no-scan"
+        ? "Skip Step 4a (Impact Scan) entirely. All other steps run unchanged — this keyword never skips Steps 0-2."
+        : "Run Step 4a (Impact Scan) with line caps removed: complete inventory of every confirmed reference. Still confirmed-only, still an inventory — never speculative prose.")
   );
 }
 

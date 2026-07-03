@@ -61,7 +61,7 @@ Your 8 original flat skill files go in .claude/skills/ next to the launcher fold
 ## CLAUDE.md
 
 The shrunk CLAUDE.md in this package replaces your original (105 vs 184 lines).
-All 11 behavioral rules survive (1.1+1.2 merged); the skill table and Part 4 gate
+All 12 behavioral rules survive (1.1+1.2 merged); the skill table and Part 4 gate
 are now enforced by the hooks. Keep your original somewhere if you want to diff.
 
 ## Old CLAUDE.md patch (only if you keep your original instead)

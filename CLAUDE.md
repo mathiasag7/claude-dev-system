@@ -1,3 +1,4 @@
+@RTK.md
 > **Project context loaded automatically:**
 > @.claude/PROJECT.md
 
@@ -160,6 +161,27 @@ If a task is only partially completed — for any reason — say so explicitly b
 A response that looks complete but isn't is worse than an explicit gap. It passes review, gets merged, and fails in production. An explicit gap gets caught.
 
 **"I've implemented X. Y and Z remain — I need [clarification / more context / explicit agreement to proceed]" is a complete response. Stopping without that statement is not.**
+
+---
+
+### 1.12 — All Code Is in English
+
+Every element that belongs to the code is named in English. This includes, without exception:
+
+- Variable names
+- Function and method names
+- Class names
+- Model names
+- File names
+- Component names
+- Technical field names
+- API names, routes, DTOs, serializers, and similar constructs
+
+French — or any other language — is never used to name a code element, unless strictly imposed by an external dependency (e.g. a third-party API field, a legacy database column, a regulatory form label mandated verbatim). In that case, name the wrapper or adapter around it in English, and mention the constraint briefly at the point it's used — no formal write-up is required.
+
+**This rule governs naming, not content.** Domain Vocabulary in `PROJECT.md` §4 stays in whatever language the business uses (French terms like "Type de trajet" are correct there — that section documents meaning for humans, not code). The translation happens at the boundary: `trip_type` / `TripType` in the code, "Type de trajet" in PROJECT.md and in the UI copy shown to French-speaking users. User-facing strings (labels, error messages, UI copy) are not code elements under this rule — they follow the project's localization strategy, not this one.
+
+**A French variable, class, or endpoint name is not a style preference — it is a rule violation**, flagged the same as any other item in this file.
 
 ---
 

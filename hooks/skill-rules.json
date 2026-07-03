@@ -8,16 +8,22 @@
         "field", "fields", "dropdown", "select", "multi-select", "multiselect",
         "checkbox", "radio button", "toggle", "enum", "enum value",
         "status field", "category field", "type field", "column", "form field",
-        "detail page", "detail view", "new value", "new option"
+        "detail page", "detail view", "new value", "new option",
+        "champ", "champs", "formulaire", "liste déroulante", "menu déroulant",
+        "case à cocher", "nouvelle valeur", "nouvelle option", "nouveau statut",
+        "page de détail", "vue détail", "fiche client", "type de"
       ],
       "patterns": [
         "(add|create|introduce|include).{0,40}(field|column|dropdown|select|checkbox|toggle|radio)",
         "(add|create|introduce).{0,40}(a |an |new )?(value|option|status|category|type)\\s*(to|for|on)",
         "(field|dropdown|select|checkbox)\\s*(for|to (indicate|specify|show))",
         "(depending on|based on|according to) (the|this|its)\\s*(value|type|status|category)",
-        "values? (are|include|being)\\s*.{0,60}(and|or)\\s*.{0,40}"
+        "values? (are|include|being)\\s*.{0,60}(and|or)\\s*.{0,40}",
+        "(ajoute|ajouter|ajoutes|crée|créer|introduire|mettre?)\\s.{0,40}(champ|colonne|liste|menu|case|option|valeur|statut|sélecteur)",
+        "(champ|liste|menu|sélecteur)\\s.{0,30}(pour|qui (indique|permet|affiche))",
+        "(selon|en fonction de|dépend(ant)? d[eu]).{0,30}(la valeur|le type|le statut|la catégorie)"
       ],
-      "instruction": "Read .claude/skills/product-thinking-skill.md BEFORE feature-design-skill, frontend-ui-skill, or frontend-ux-skill. There is no fast exit for size — a single field or a single new enum value is exactly the case this skill exists for. Begin with Step 0 (surface + persona from PROJECT.md) and Step 1 (simulate the finished product: what the persona needs to know/do, and whether this field's value changes what else should appear, be required, or be editable). Step 2's open questions (visibility/editability/timing/conditionality/placement/cardinality) must be asked, not assumed. Step 4's gap analysis (literal request vs. finished-product version) must be presented explicitly before building either — per CLAUDE.md §1.8, never expand or shrink scope silently."
+      "instruction": "Read .claude/skills/product-thinking-skill.md BEFORE feature-design-skill, frontend-ui-skill, or frontend-ux-skill. There is no fast exit for size — a single field or a single new enum value is exactly the case this skill exists for. Begin with Step 0 (surface + persona from PROJECT.md + the UNDERLYING NEED in one sentence — if the request is not the simplest answer to that need, surface the alternative in Step 4 as an option, never silently). Step 1: simulate the finished product (what the persona needs to know/do, and whether this field's value changes what else should appear, be required, or be editable). Step 2: RESOLVE FIRST from PROJECT.md and existing code, then ask only the residual — every asked question must carry a recommended answer with a one-line rationale so the human can reply 'ok'. Step 4: for field/enum/model changes run the bounded Impact Scan (mechanical grep, capped inventory — never a speculative essay), then present the gap analysis (literal request vs. finished-product version) explicitly before building either — per CLAUDE.md §1.8, never expand or shrink scope silently. If a [MODE OVERRIDE] block was injected with this prompt, it is authoritative for the Impact Scan (no-scan = skip 4a; full-scan = uncapped); it never skips Steps 0-2."
     },
     "debugging-skill": {
       "file": ".claude/skills/debugging-skill.md",
