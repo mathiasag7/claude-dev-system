@@ -390,4 +390,5 @@ Steps 2 and 4 are non-negotiable wait points when they surface anything beyond t
 
 ```
 [DATE] — [project] — [lesson]
+[2026-07] — opencrm — Le formulaire New Lead (hérité du framework) contenait un Customer type dont la valeur aurait dû conditionner les champs suivants ; les écrans hérités ne passent jamais par le skill — les auditer manuellement au premier contact
 ```

@@ -51,8 +51,10 @@ The following skills are available in `.claude/skills/`. Each defines a process,
 | **Any field, screen, form, or data change a real user will see** | `product-thinking-skill.md` — **run this FIRST, before the skill below** |
 | Designing a new feature | `feature-design-skill.md` |
 | Implementing backend logic, API, batch job, state transition | `backend-skill.md` |
+| **Designing what a screen looks like (mockup, maquette, visual redesign, design system, art direction)** | `visual-design-skill.md` — **run BEFORE `frontend-ui-skill.md`** |
 | Building or modifying UI components, screens, design system | `frontend-ui-skill.md` |
 | Designing or reviewing a user flow, form, or interaction sequence | `frontend-ux-skill.md` |
+| Auditing or remediating a messy/inconsistent existing design | `design-audit-skill.md` |
 | Writing, reviewing, or fixing tests | `testing-skill.md` |
 | Diagnosing or fixing a bug | `debugging-skill.md` |
 | Refactoring, migrating, or reducing technical debt | `architecture-refactoring-skill.md` |
@@ -60,6 +62,8 @@ The following skills are available in `.claude/skills/`. Each defines a process,
 **Skill activation is not optional.** If a task matches a skill trigger — activate it. Do not paraphrase the skill from memory. Read it.
 
 **On `product-thinking-skill.md` specifically:** it has no fast-exit for triviality. A single field, a single new enum value, a single UI element being asked for is exactly the size of change where product consequences are most often missed. "This is too small to need a skill" is the instinct this skill exists to override — treat that instinct itself as the trigger to activate it.
+
+**On `visual-design-skill.md` specifically:** it runs BEFORE `frontend-ui-skill.md`, not instead of it. `visual-design` decides what a screen looks like and keeps it consistent across screens (via the persistent design memory in `.claude/design/`); `frontend-ui` implements the result in code. Designing a screen's visuals directly in code, skipping the design memory, is how a header present on one screen silently disappears on the next.
 
 ---
 

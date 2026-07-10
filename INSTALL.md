@@ -7,29 +7,33 @@ hooks make skill activation and the PROJECT.md gate mechanical instead of volunt
 
 ```
 .claude/
-├── CLAUDE.md                         ← shrunk universal rules (replaces your 184-line version)
+├── CLAUDE.md                         ← shrunk universal rules (replaces your original)
 ├── settings.json                     ← wires both hooks (merge if you already have one)
 ├── hooks/
 │   ├── skill-activation.mjs          ← UserPromptSubmit: injects skill instructions per prompt
 │   ├── skill-rules.json              ← triggers per skill — the only file you maintain
 │   └── session-start.sh              ← SessionStart: enforces the PROJECT.md gate
 └── skills/
-    ├── design-audit-skill.md         ← new remediation skill (messy existing designs)
-    ├── sk-onboard/SKILL.md              ← /sk-onboard         → project-onboarding-skill.md
-    ├── sk-design-audit/SKILL.md         ← /sk-design-audit    → design-audit-skill.md
-    ├── sk-feature-design/SKILL.md       ← /sk-feature-design  → feature-design-skill.md
-    ├── sk-backend/SKILL.md              ← /sk-backend         → backend-skill.md
-    ├── sk-frontend-ui/SKILL.md          ← /sk-frontend-ui     → frontend-ui-skill.md
-    ├── sk-frontend-ux/SKILL.md          ← /sk-frontend-ux     → frontend-ux-skill.md
-    ├── sk-testing/SKILL.md              ← /sk-testing         → testing-skill.md
-    ├── sk-debugging/SKILL.md            ← /sk-debugging       → debugging-skill.md
-    └── sk-refactor/SKILL.md             ← /sk-refactor        → architecture-refactoring-skill.md
+    ├── design-audit-skill.md            ← remediation skill (messy existing designs)
+    ├── product-thinking-skill.md        ← run FIRST for user-facing field/screen/data changes
+    ├── visual-design-skill.md           ← run BEFORE frontend-ui (mockups, design system, consistency)
+    ├── sk-onboard/SKILL.md              ← /sk-onboard          → project-onboarding-skill.md
+    ├── sk-product-thinking/SKILL.md     ← /sk-product-thinking → product-thinking-skill.md
+    ├── sk-design-audit/SKILL.md         ← /sk-design-audit     → design-audit-skill.md
+    ├── sk-feature-design/SKILL.md       ← /sk-feature-design   → feature-design-skill.md
+    ├── sk-backend/SKILL.md              ← /sk-backend          → backend-skill.md
+    ├── sk-visual-design/SKILL.md        ← /sk-visual-design    → visual-design-skill.md
+    ├── sk-frontend-ui/SKILL.md          ← /sk-frontend-ui      → frontend-ui-skill.md
+    ├── sk-frontend-ux/SKILL.md          ← /sk-frontend-ux      → frontend-ux-skill.md
+    ├── sk-testing/SKILL.md              ← /sk-testing          → testing-skill.md
+    ├── sk-debugging/SKILL.md            ← /sk-debugging        → debugging-skill.md
+    └── sk-refactor/SKILL.md             ← /sk-refactor         → architecture-refactoring-skill.md
 ```
 
 Each `<name>/SKILL.md` is a thin launcher: typing /<name> (or Claude auto-loading it
 from its description) instructs Claude to read the corresponding flat *-skill.md in
 full. Your flat files stay the single source of truth; launchers never duplicate them.
-Your 8 original flat skill files go in .claude/skills/ next to the launcher folders.
+Your flat skill files go in .claude/skills/ next to the launcher folders.
 
 ## Install
 
@@ -46,6 +50,10 @@ Your 8 original flat skill files go in .claude/skills/ next to the launcher fold
   should be the PROJECT CONTEXT GATE block.
 - Type "fix the bug in X" → Claude's context receives the debugging-skill activation
   block before it responds. Ask Claude "what was injected with my prompt?" to confirm.
+- Type "ajoute le champ Type de client au formulaire" → the product-thinking-skill
+  activation should fire (French triggers are wired).
+- Type "fais la maquette de la page X, no-scan" → the visual-design activation fires,
+  and product-thinking's Impact Scan mode-override is detected deterministically.
 
 ## Maintain
 
@@ -55,21 +63,28 @@ Your 8 original flat skill files go in .claude/skills/ next to the launcher fold
   If it misses, add the phrasing you actually used to its keywords.
   The escape valve ("state why it doesn't apply, then proceed") makes false
   positives cheap, so err on the side of firing.
+- **Scan-mode override:** `no-scan` / `full-scan` / `scan-complet` anywhere in a
+  prompt is detected deterministically by the hook and injected as a [MODE OVERRIDE]
+  block consumed by product-thinking-skill. It modulates the Impact Scan only — it
+  never skips the product-thinking core steps.
 - The dedup cache lives in `.claude/.cache/skill-hook/` — add it to `.gitignore`.
   Delete it anytime to reset reminders.
 
 ## CLAUDE.md
 
-The shrunk CLAUDE.md in this package replaces your original (105 vs 184 lines).
-All 12 behavioral rules survive (1.1+1.2 merged); the skill table and Part 4 gate
-are now enforced by the hooks. Keep your original somewhere if you want to diff.
+The shrunk CLAUDE.md in this package replaces your original. All 12 behavioral rules
+survive (1.1+1.2 were merged in an earlier revision; 1.12 "All Code Is in English"
+was added later). The skill table and Part 4 gate are reinforced by the hooks.
+Keep your original somewhere if you want to diff.
 
 ## Old CLAUDE.md patch (only if you keep your original instead)
 
-Add one row to the §1.3 skill table:
+Add the new rows to the §1.3 skill table:
 
 ```
-| Auditing or remediating an existing messy/inconsistent design | `design-audit-skill.md` |
+| Any field, screen, form, or data change a real user will see | product-thinking-skill.md — run FIRST |
+| Designing what a screen looks like (mockup, design system, art direction) | visual-design-skill.md — run BEFORE frontend-ui |
+| Auditing or remediating an existing messy/inconsistent design | design-audit-skill.md |
 ```
 
 And optionally append to §1.3:
