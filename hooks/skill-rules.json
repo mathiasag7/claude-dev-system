@@ -141,6 +141,45 @@
       ],
       "instruction": "Read .claude/skills/design-audit-skill.md. This is remediation work, not new-build work — do NOT start restyling pages. Begin with Phase 0 (establish visual access) and Phase 1 (inventory). No page is modified before the canonical system is confirmed by the human."
     },
+    "qa-selfcheck-skill": {
+      "file": ".claude/skills/qa-selfcheck-skill.md",
+      "priority": 8,
+      "keywords": [
+        "smoke test", "qa", "verify", "verification", "self-check", "sanity check",
+        "before shipping", "definition of done", "regression", "404 when",
+        "doesn't work when I click", "nothing happens", "stale data", "demo data",
+        "seed data", "fill demo", "new user gets", "fresh user",
+        "vérifie", "vérifier", "teste l'app", "tester l'application", "ça marche pas quand",
+        "rien ne se passe", "bouton ne fait rien", "données du précédent",
+        "remplir démo", "nouvel utilisateur", "avant de livrer", "c'est terminé ?"
+      ],
+      "patterns": [
+        "(run|write|add|do).{0,30}(smoke|sanity|qa).{0,15}(test|check|pass)",
+        "(verify|check|make sure).{0,50}(works?|working|route|form|button|flow|page)",
+        "(is it|are we|c'?est).{0,20}(done|finished|termin[ée]|fini)",
+        "(clique|click).{0,40}(rien|nothing|404|erreur|error)",
+        "(formulaire|form).{0,50}(garde|retient|keeps?|retains?|stale|précédent|previous)",
+        "(démo|demo|seed|fixture).{0,40}(incohéren|absurde|faux|wrong|fake|incoherent)",
+        "(vérifie|teste|contrôle).{0,40}(que tout|l'?app|les routes|le parcours|le flux)"
+      ],
+      "instruction": "Read .claude/skills/qa-selfcheck-skill.md before declaring any implementation task done. This skill runs LAST, after backend/frontend/debugging skills. Begin with the Step 0 impact surface block (ROUTES / FORMS / CLICKABLES / DATA ASSUMED — every assumed object must be guaranteed or handled). Step 1 fresh-user pass is non-negotiable: exercise the flow as a newly created empty account and keep the NewUserSmokeTest green — a failing route is fixed in the view, never hidden in the exclusion set. Verify the five form-lifecycle invariants (create-mode reset, edit≠create, dual back semantics, draft, per-step validation), demo/seed plausibility field by field, and every touched clickable. End with the Step 6 verification report block filled honestly, per CLAUDE.md §1.11 — no block, no done. Anything non-automatable is handed to the human as a short precise list, never 'test everything'."
+    },
+    "retro-skill": {
+      "file": ".claude/skills/retro-skill.md",
+      "priority": 4,
+      "keywords": [
+        "retro", "retrospective", "lessons learned", "what did we learn",
+        "end of session", "wrap up", "wrap-up", "consign", "capture the lesson",
+        "qu'est-ce qu'on retient", "leçons", "fin de session", "consigne",
+        "on retient quoi", "bilan de session"
+      ],
+      "patterns": [
+        "(run|do|start|faire|lance[rz]?).{0,20}(retro|rétro|bilan)",
+        "(what|qu'?).{0,20}(did we|est-ce qu'?on|avons[- ]nous).{0,20}(learn|appris|retien)",
+        "(consign|capture|log|note).{0,30}(lesson|leçon|apprentissage)"
+      ],
+      "instruction": "Read .claude/skills/retro-skill.md. Harvest only H1–H5 events tested against the consignment bar (would it change next session's behavior?). Route each lesson to its single home per the routing table — skill Lessons Learned, PROJECT.md §4/§5/§8, skill-rules.json keywords — and only PROPOSE entries for PROJECT.md §3/§6/§10 unless the human validated them in-session. Deduplicate (annotate recurrences, escalate to amending the failing skill step), cap at 3 written entries, end with the retro report block, then write .claude/.cache/retro/<session_id> so the Stop gate does not re-fire. An empty retro is one line: 'Retro: nothing meets the consignment bar.'"
+    },
     "project-onboarding-skill": {
       "file": ".claude/skills/project-onboarding-skill.md",
       "priority": 9,

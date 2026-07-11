@@ -58,6 +58,8 @@ The following skills are available in `.claude/skills/`. Each defines a process,
 | Writing, reviewing, or fixing tests | `testing-skill.md` |
 | Diagnosing or fixing a bug | `debugging-skill.md` |
 | Refactoring, migrating, or reducing technical debt | `architecture-refactoring-skill.md` |
+| **Verifying implemented work before declaring it done (routes, forms, demo data, fresh-user path)** | `qa-selfcheck-skill.md` — **run LAST, before any "done"** |
+| **Closing a session that modified code (lesson capture, decision log, trigger tuning)** | `retro-skill.md` — **run at session end; enforced by the Stop-hook retro gate** |
 
 **Skill activation is not optional.** If a task matches a skill trigger — activate it. Do not paraphrase the skill from memory. Read it.
 

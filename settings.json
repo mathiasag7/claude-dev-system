@@ -19,6 +19,13 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node .claude/hooks/retro-gate.mjs" }
+        ]
+      }
     ]
   }
 }
