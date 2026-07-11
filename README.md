@@ -19,11 +19,12 @@ Every project loses time to the same two problems. First: knowledge accumulated 
 ├── CLAUDE.md                          ← Universal rules (12). Copy to every project. Never modify per-project.
 ├── PROJECT.md                         ← Project-specific context. Filled by /sk-onboard. Updated continuously.
 ├── README.md                          ← This file.
-├── settings.json                      ← Wires the two hooks. Commit to git.
+├── settings.json                      ← Wires the three hooks. Commit to git.
 │
 ├── hooks/                             ← Enforcement layer (deterministic)
 │   ├── session-start.sh               ← SessionStart: verifies PROJECT.md is complete; injects the gate if not
 │   ├── skill-activation.mjs           ← UserPromptSubmit: matches each prompt to its skill, injects activation
+│   ├── retro-gate.mjs                 ← Stop: blocks once if the session modified code and no retro was consigned
 │   └── skill-rules.json               ← Trigger rules per skill — the only enforcement file you maintain
 │
 └── skills/
@@ -39,6 +40,8 @@ Every project loses time to the same two problems. First: knowledge accumulated 
     ├── debugging-skill.md
     ├── architecture-refactoring-skill.md
     ├── design-audit-skill.md          ← Remediation of messy/inconsistent existing designs
+    ├── qa-selfcheck-skill.md          ← Run LAST before any "done" (routes, forms, demo data, fresh-user path)
+    ├── retro-skill.md                 ← Session-close lesson capture — enforced by the Stop-hook retro gate
     │
     │   ── Launchers (thin SKILL.md dirs → slash commands + semantic auto-load) ──
     ├── sk-onboard/SKILL.md            ← /sk-onboard          → project-onboarding-skill.md
@@ -51,7 +54,9 @@ Every project loses time to the same two problems. First: knowledge accumulated 
     ├── sk-testing/SKILL.md            ← /sk-testing          → testing-skill.md
     ├── sk-debugging/SKILL.md          ← /sk-debugging        → debugging-skill.md
     ├── sk-refactor/SKILL.md           ← /sk-refactor         → architecture-refactoring-skill.md
-    └── sk-design-audit/SKILL.md       ← /sk-design-audit     → design-audit-skill.md
+    ├── sk-design-audit/SKILL.md       ← /sk-design-audit     → design-audit-skill.md
+    ├── sk-qa-selfcheck/SKILL.md       ← /sk-qa-selfcheck     → qa-selfcheck-skill.md
+    └── sk-retro/SKILL.md              ← /sk-retro            → retro-skill.md
 ```
 
 ---
@@ -62,7 +67,7 @@ Every skill can be activated three independent ways. The flat `*-skill.md` file 
 
 1. **Hook (deterministic floor).** On every prompt, `skill-activation.mjs` matches keywords and patterns from `skill-rules.json` and injects the matching skill's activation instruction into context — including which Step 0 block to begin with. First match in a session = full instruction; repeats = one-line reminder. The model cannot forget what is re-injected.
 2. **Semantic (Claude self-triggers).** Each `sk-*/SKILL.md` launcher carries a description derived from the skill's "When to Trigger" section. Claude Code can auto-load the launcher when a prompt matches the meaning, even if no keyword matched — catching phrasings the regex missed.
-3. **Manual (100% certain).** Typing `/sk-` in the picker lists all eleven commands. Use them when you know what kind of work is starting — especially `/sk-onboard` and `/sk-design-audit`, the two heavyweight ceremonies.
+3. **Manual (100% certain).** Typing `/sk-` in the picker lists all thirteen commands. Use them when you know what kind of work is starting — especially `/sk-onboard` and `/sk-design-audit`, the two heavyweight ceremonies.
 
 If a launcher fires, its first instruction is always: read the corresponding flat skill file in full with the Read tool — never paraphrase it from memory.
 
@@ -100,7 +105,7 @@ Captures everything Claude cannot infer from the code alone. Filled by the onboa
 
 ### `hooks/` — Enforcement Layer
 
-Hooks are the difference between rules Claude is asked to follow and rules Claude is made to see. `session-start.sh` runs once per session (the PROJECT.md gate). `skill-activation.mjs` runs on every prompt (skill routing). `skill-rules.json` is the only file to maintain: when adding a skill, add its keywords, patterns, and activation instruction there. Tuning guidance: false positives are cheap (Claude states why the match is wrong in one sentence, then proceeds), so err on the side of firing. The dedup cache in `.claude/.cache/skill-hook/` belongs in `.gitignore`.
+Hooks are the difference between rules Claude is asked to follow and rules Claude is made to see. `session-start.sh` runs once per session (the PROJECT.md gate). `skill-activation.mjs` runs on every prompt (skill routing). `retro-gate.mjs` runs at Stop: if the session left uncommitted changes to code-like files and no retro marker exists, it blocks exactly once with the instruction to run `retro-skill.md`, then writes the marker so it never re-fires in the same session. `skill-rules.json` is the only file to maintain: when adding a skill, add its keywords, patterns, and activation instruction there. Tuning guidance: false positives are cheap (Claude states why the match is wrong in one sentence, then proceeds), so err on the side of firing. The caches in `.claude/.cache/` (skill-hook dedup, retro markers) belong in `.gitignore`.
 
 ### `skills/` — Reusable Work Processes
 
@@ -119,12 +124,14 @@ Each flat skill defines a complete process: when to trigger it, how to execute s
 | `debugging-skill.md` | Diagnosing or fixing any bug |
 | `architecture-refactoring-skill.md` | Refactoring, migrating, or reducing technical debt |
 | `design-audit-skill.md` | Auditing/remediating a messy, inconsistent, or never-systematized existing design |
+| `qa-selfcheck-skill.md` | **Before declaring any implementation task done** — routes, forms, clickables, demo data, fresh-user path |
+| `retro-skill.md` | **At session close** (or before compaction) — lesson capture; enforced by the Stop-hook retro gate |
 
 ---
 
 ## How to use this on a new project
 
-**Step 1 — Copy the folder.** Copy the entire `.claude/` folder into the root of the new project, then `chmod +x .claude/hooks/session-start.sh`. Commit everything except `.claude/.cache/`. Run `/hooks` in the first session to confirm both hooks registered, and type `/sk-` to confirm the eleven commands appear.
+**Step 1 — Copy the folder.** Copy the entire `.claude/` folder into the root of the new project, then `chmod +x .claude/hooks/session-start.sh`. Commit everything except `.claude/.cache/`. Run `/hooks` in the first session to confirm the three hooks registered, and type `/sk-` to confirm the thirteen commands appear.
 
 **Step 2 — Onboarding runs itself.** The SessionStart hook detects the unfilled PROJECT.md and injects the gate; run `/sk-onboard`. For existing projects, Claude reads the codebase and builds an inference map before asking anything; for greenfield, it asks a structured sequence. Either way it produces a complete PROJECT.md — including Active Quality Lenses — and presents it for confirmation before writing.
 

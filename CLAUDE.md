@@ -1,4 +1,3 @@
-@RTK.md
 > **Project context loaded automatically:**
 > @.claude/PROJECT.md
 

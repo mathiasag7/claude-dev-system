@@ -8,10 +8,11 @@ hooks make skill activation and the PROJECT.md gate mechanical instead of volunt
 ```
 .claude/
 ├── CLAUDE.md                         ← shrunk universal rules (replaces your original)
-├── settings.json                     ← wires both hooks (merge if you already have one)
+├── settings.json                     ← wires the three hooks (merge if you already have one)
 ├── hooks/
 │   ├── skill-activation.mjs          ← UserPromptSubmit: injects skill instructions per prompt
 │   ├── skill-rules.json              ← triggers per skill — the only file you maintain
+│   ├── retro-gate.mjs                ← Stop: retro gate (blocks once if code changed and no retro was consigned)
 │   └── session-start.sh              ← SessionStart: enforces the PROJECT.md gate
 └── skills/
     ├── design-audit-skill.md            ← remediation skill (messy existing designs)
@@ -27,7 +28,9 @@ hooks make skill activation and the PROJECT.md gate mechanical instead of volunt
     ├── sk-frontend-ux/SKILL.md          ← /sk-frontend-ux      → frontend-ux-skill.md
     ├── sk-testing/SKILL.md              ← /sk-testing          → testing-skill.md
     ├── sk-debugging/SKILL.md            ← /sk-debugging        → debugging-skill.md
-    └── sk-refactor/SKILL.md             ← /sk-refactor         → architecture-refactoring-skill.md
+    ├── sk-refactor/SKILL.md             ← /sk-refactor         → architecture-refactoring-skill.md
+    ├── sk-qa-selfcheck/SKILL.md         ← /sk-qa-selfcheck     → qa-selfcheck-skill.md
+    └── sk-retro/SKILL.md                ← /sk-retro            → retro-skill.md
 ```
 
 Each `<name>/SKILL.md` is a thin launcher: typing /<name> (or Claude auto-loading it
@@ -41,7 +44,7 @@ Your flat skill files go in .claude/skills/ next to the launcher folders.
    (merge `settings.json` if one exists — the `hooks` key is what matters).
 2. `chmod +x .claude/hooks/session-start.sh` (the .mjs needs no chmod; it's invoked via `node`).
 3. Requirements: Node (already required by Claude Code) and bash.
-4. Restart the Claude Code session. Run `/hooks` to verify both hooks are registered.
+4. Restart the Claude Code session. Run `/hooks` to verify the three hooks (SessionStart, UserPromptSubmit, Stop) are registered.
 5. Commit `.claude/settings.json` and `.claude/hooks/` to git so the whole team gets enforcement.
 
 ## Verify
@@ -67,8 +70,8 @@ Your flat skill files go in .claude/skills/ next to the launcher folders.
   prompt is detected deterministically by the hook and injected as a [MODE OVERRIDE]
   block consumed by product-thinking-skill. It modulates the Impact Scan only — it
   never skips the product-thinking core steps.
-- The dedup cache lives in `.claude/.cache/skill-hook/` — add it to `.gitignore`.
-  Delete it anytime to reset reminders.
+- The caches live in `.claude/.cache/` (skill-hook dedup + retro markers) — add
+  `.claude/.cache/` to `.gitignore`. Delete anytime to reset reminders/gates.
 
 ## CLAUDE.md
 
@@ -98,6 +101,8 @@ And optionally append to §1.3:
 
 Hooks enforce *that the instruction is present every time*. The model still does
 the judgment work. Two rules remain culture, not law — keep reviewing for them:
-scope discipline (§1.8) and labeling partial answers (§1.11). If you later want
-mechanical pressure on those too, a Stop hook can check, e.g., that a session
-containing a bug fix also touched a test file — happy to extend this when needed.
+scope discipline (§1.8) and labeling partial answers (§1.11). The Stop hook
+(retro-gate.mjs) already puts mechanical pressure on session-close lesson capture;
+its heuristic is "uncommitted changes to code-like files", so a repo that was
+already dirty before the session will also trigger it — known limitation, cheap
+to dismiss ("Retro: nothing meets the consignment bar.").

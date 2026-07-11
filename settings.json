@@ -23,7 +23,7 @@
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "node .claude/hooks/retro-gate.mjs" }
+          { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/retro-gate.mjs\"" }
         ]
       }
     ]

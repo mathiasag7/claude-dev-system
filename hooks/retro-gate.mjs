@@ -10,7 +10,8 @@ const input = JSON.parse(readFileSync(0, "utf8"));
 // Never fight the loop guard: if we already blocked once, always allow.
 if (input.stop_hook_active) process.exit(0);
 
-const cacheDir = join(process.cwd(), ".claude", ".cache", "retro");
+const projectDir = process.env.CLAUDE_PROJECT_DIR || input.cwd || process.cwd();
+const cacheDir = join(projectDir, ".claude", ".cache", "retro");
 const marker = join(cacheDir, `${input.session_id || "unknown"}`);
 if (existsSync(marker)) process.exit(0);
 
@@ -18,7 +19,7 @@ if (existsSync(marker)) process.exit(0);
 const CODE = /\.(py|js|mjs|ts|tsx|jsx|html|css|scss|json|md|yml|yaml|sql)$/i;
 let touched = [];
 try {
-  const out = execSync("git status --porcelain", { encoding: "utf8" });
+  const out = execSync("git status --porcelain", { encoding: "utf8", cwd: projectDir });
   touched = out.split("\n").filter(Boolean)
     .map(l => l.slice(3).trim())
     .filter(f => CODE.test(f) && !f.startsWith(".claude/.cache/"));
