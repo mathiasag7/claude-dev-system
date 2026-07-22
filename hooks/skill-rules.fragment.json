@@ -1,0 +1,27 @@
+{
+  "domain-brain-skill": {
+    "file": ".claude/skills/domain-brain-skill.md",
+    "priority": 10,
+    "keywords": [
+      "je veux construire", "on veut construire", "nouvelle feature", "concevoir",
+      "conception", "quelle approche", "bonne approche", "bonne manière",
+      "comment aborder", "modèle de données", "réutilisable", "générique",
+      "multi-institution", "plusieurs institutions", "common ground", "référentiel",
+      "dossier métier", "business analyst", "logique métier", "proposition",
+      "cahier des charges",
+      "new capability", "how should we approach", "right approach", "data model",
+      "reusable", "generic", "multi-tenant", "taxonomy", "nomenclature"
+    ],
+    "patterns": [
+      "(je|on) (veux|voudrais|va|allons) (construire|créer|bâtir|concevoir|mettre en place)",
+      "quelle est la (bonne|meilleure) (approche|manière|façon|architecture)",
+      "(peut|doit|devrait)-on (se baser|s'appuyer) sur",
+      "(comment|par où) (aborder|commencer|penser|structurer)",
+      "(réutilis|génériq|multi.?(tenant|institution|pays))",
+      "(logique|règles?|modèle) métier",
+      "(what is|what's) the (right|best) (approach|model|abstraction)",
+      "(should|can) (we|it) (be based on|rely on|generalize)"
+    ],
+    "instruction": "Read .claude/skills/domain-brain-skill.md and run it BEFORE product-thinking-skill and feature-design-skill — this skill decides the conceptual model, they decide the screens and the build. Begin with Step 0 (capability + REUSE HORIZON — ask the horizon first if unstated, with a recommendation). Step 1: generate the domain model boldly from Claude's own expertise (Phase G, every claim tagged [MODEL-HIGH]/[MODEL-LOW]), then verify selectively what the design depends on (Phase V: the governing authority's actual publications via web search, real data from the user), human last — every question with a recommendation. Step 2 is a hard wait point: the invariance map (UNIVERSAL/CONFIGURABLE/LOCAL) must exist and be confirmed before any doctype, model, or code — reusable logic consumes UNIVERSAL/CONFIGURABLE only, and any value a business person could ask to change is CONFIGURABLE (table, never code). Step 4: 2–3 options, explicit criteria, ONE recommendation, decision recorded with its reopening condition — no redo loops without new information. Step 5: write or UPDATE the Dossier Métier in docs/domain/ (status DRAFT); PROJECT.md gets only a pointer line + cross-feature invariants. Step 6: submit the dossier to the domain-critic agent in a FRESH context (dossier path as ONLY input, never the conversation), resolve every challenge (source / reasoning written into the dossier / conceded), 2 rounds max, then mark the dossier VALIDÉ. Step 7: present the Proposition in sponsor language (how it works, chosen approach and why, constraints, admin impact, 2–3 arbitration points with recommendations) — never on a DRAFT dossier, never jump from here to code."
+  }
+}

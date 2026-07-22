@@ -1,3 +1,4 @@
+@RTK.md
 > **Project context loaded automatically:**
 > @.claude/PROJECT.md
 
@@ -47,7 +48,8 @@ The following skills are available in `.claude/skills/`. Each defines a process,
 | Task type | Skill to activate |
 |---|---|
 | **Starting a new project or PROJECT.md is empty** | `project-onboarding-skill.md` |
-| **Any field, screen, form, or data change a real user will see** | `product-thinking-skill.md` — **run this FIRST, before the skill below** |
+| **Specifying or conceiving any NEW capability — its domain logic, its data model, anything meant to be reusable across institutions/tenants** | `domain-brain-skill.md` — **run FIRST, before every skill below** |
+| **Any field, screen, form, or data change a real user will see** | `product-thinking-skill.md` — **runs before the build skills below; after `domain-brain` when the capability itself is new** |
 | Designing a new feature | `feature-design-skill.md` |
 | Implementing backend logic, API, batch job, state transition | `backend-skill.md` |
 | **Designing what a screen looks like (mockup, maquette, visual redesign, design system, art direction)** | `visual-design-skill.md` — **run BEFORE `frontend-ui-skill.md`** |
@@ -62,7 +64,9 @@ The following skills are available in `.claude/skills/`. Each defines a process,
 
 **Skill activation is not optional.** If a task matches a skill trigger — activate it. Do not paraphrase the skill from memory. Read it.
 
-**On `product-thinking-skill.md` specifically:** it has no fast-exit for triviality. A single field, a single new enum value, a single UI element being asked for is exactly the size of change where product consequences are most often missed. "This is too small to need a skill" is the instinct this skill exists to override — treat that instinct itself as the trigger to activate it.
+**On `domain-brain-skill.md` specifically:** it is the most upstream skill — it decides the conceptual model of a capability before any doctype, screen, or line of code exists. It generates the domain model from Claude's own expertise (every claim tagged by confidence), verifies design-critical claims against the governing authority's publications and real data, builds the invariance map (UNIVERSAL / CONFIGURABLE / LOCAL — reusable logic never consumes LOCAL concepts; any value a business person could ask to change lives in a table, never in code), records ONE decision with explicit criteria, and capitalizes everything as a **Dossier Métier** in `docs/domain/` — which `product-thinking-skill` and `feature-design-skill` then read. The draft dossier is challenged by the `domain-critic` agent (`.claude/agents/`, fresh context, dossier as its only input) before the Proposition goes to the human. PROJECT.md stays a compass — pointer lines and cross-feature invariants only; the business depth lives in the dossiers.
+
+**On `product-thinking-skill.md` specifically:** it has no fast-exit for triviality. A single field, a single new enum value, a single UI element being asked for is exactly the size of change where product consequences are most often missed. "This is too small to need a skill" is the instinct this skill exists to override — treat that instinct itself as the trigger to activate it. When a Dossier Métier exists for the capability being touched, read it before simulating.
 
 **On `visual-design-skill.md` specifically:** it runs BEFORE `frontend-ui-skill.md`, not instead of it. `visual-design` decides what a screen looks like and keeps it consistent across screens (via the persistent design memory in `.claude/design/`); `frontend-ui` implements the result in code. Designing a screen's visuals directly in code, skipping the design memory, is how a header present on one screen silently disappears on the next.
 
@@ -184,7 +188,7 @@ Every element that belongs to the code is named in English. This includes, witho
 
 French — or any other language — is never used to name a code element, unless strictly imposed by an external dependency (e.g. a third-party API field, a legacy database column, a regulatory form label mandated verbatim). In that case, name the wrapper or adapter around it in English, and mention the constraint briefly at the point it's used — no formal write-up is required.
 
-**This rule governs naming, not content.** Domain Vocabulary in `PROJECT.md` §4 stays in whatever language the business uses (French terms like "Type de trajet" are correct there — that section documents meaning for humans, not code). The translation happens at the boundary: `trip_type` / `TripType` in the code, "Type de trajet" in PROJECT.md and in the UI copy shown to French-speaking users. User-facing strings (labels, error messages, UI copy) are not code elements under this rule — they follow the project's localization strategy, not this one.
+**This rule governs naming, not content.** Domain Vocabulary in `PROJECT.md` §4 and the Dossiers Métier in `docs/domain/` stay in whatever language the business uses (French terms like "Type de trajet" are correct there — those documents capture meaning for humans, not code). The translation happens at the boundary: `trip_type` / `TripType` in the code, "Type de trajet" in PROJECT.md, the dossier, and the UI copy shown to French-speaking users. User-facing strings (labels, error messages, UI copy) are not code elements under this rule — they follow the project's localization strategy, not this one.
 
 **A French variable, class, or endpoint name is not a style preference — it is a rule violation**, flagged the same as any other item in this file.
 
@@ -196,6 +200,8 @@ Read `.claude/PROJECT.md` for the project-specific context, constraints, domain 
 
 PROJECT.md is the only file that changes between projects. This file never changes.
 
+**PROJECT.md is a compass, not an encyclopedia.** The per-capability business depth lives in the Dossiers Métier (`docs/domain/*-dossier.md`), produced and maintained by `domain-brain-skill.md`. PROJECT.md §4 carries the index of dossiers; before working on a capability that has one, read its dossier.
+
 ---
 
 ## PART 3 — SESSION STARTUP CHECKLIST
@@ -203,6 +209,7 @@ PROJECT.md is the only file that changes between projects. This file never chang
 
 - [ ] Have I read `.claude/PROJECT.md` completely?
 - [ ] Do I know the current stack, constraints, and forbidden patterns for this project?
+- [ ] Does the task touch a capability that has a Dossier Métier in `docs/domain/`? If yes — read it.
 - [ ] Is there a skill I should activate for the first task of this session?
 - [ ] If continuing from a previous session — have I re-read the relevant code, not just the conversation?
 

@@ -1,7 +1,7 @@
 ---
 name: qa-selfcheck
-version: 1.0.0
-description: After implementing or modifying any route, view, form, multi-step flow, clickable element, or demo/seed feature, run a mandatory verification loop BEFORE declaring the work done. Catches the bug classes that manual screen-by-screen human QA keeps finding — fresh-user 404s, residual form state, incoherent demo data, dead buttons — by shifting the verification burden from the human to the agent, and by encoding it into repeatable automated tests wherever possible.
+version: 1.1.0
+description: After implementing or modifying any route, view, form, multi-step flow, clickable element, or demo/seed feature, run a mandatory verification loop BEFORE declaring the work done. Catches the bug classes that manual screen-by-screen human QA keeps finding — fresh-user 404s, residual form state, incoherent demo data, dead buttons, silent-wrong computed outputs and broken exports — by shifting the verification burden from the human to the agent, and by encoding it into repeatable automated tests wherever possible.
 category: quality
 tags: [qa, verification, smoke-test, regression, self-check, definition-of-done, new-user, form-lifecycle, seed-data]
 ---
@@ -90,6 +90,16 @@ class NewUserSmokeTest(TestCase):
 
 **Hard rule:** a view that fails this test because a related object is missing is fixed in the view (get_or_create / defaults / empty state) — never by adding the route to the exclusion set. The exclusion set is for routes requiring kwargs, and each of those must have its own test with a fresh user.
 
+The fresh-user pass has three sub-passes — GET alone is not a pass:
+
+1. **GET smoke** — the test above: every named route responds 200/302 for a fresh, empty user.
+2. **Mutation smoke** — every form touched by the change POSTs once successfully with minimal valid data, and once with invalid data producing a user-visible error (never a 500).
+3. **Authorization pass** — if the project defines roles or permissions (PROJECT.md §7), a fresh user WITHOUT the required role gets 403 or a redirect on each touched route — never 200 (data leak) and never 500 (missing-permission crash). In regulated/financial projects this sub-pass is forced.
+
+**Fresh-install corollary:** the fresh user presupposes a working fresh database. If the change touched models, migrations, or seed code, verify once that migrations + seed run cleanly on an empty database — a fresh-user test on a hand-patched dev DB proves nothing about a real deployment.
+
+(The code sample above is Django; translate the pattern to the project's stack per PROJECT.md §2 — the invariant is stack-agnostic: *every reachable route, one fresh empty account, no 4xx/5xx surprises*.)
+
 ### Step 2 — Form Lifecycle Invariants
 
 For every form touched, verify five invariants:
@@ -104,13 +114,16 @@ Automate what's automatable (reset and edit/create are plain view tests: POST re
 
 ### Step 3 — Demo/Seed Data Integrity
 
-Any demo-fill or fixture draws from **typed, domain-plausible pools** — per field type, not from one generic pool:
+Any demo-fill or fixture draws from **typed, domain-plausible pools** — per field type, not from one generic pool. Plausibility is defined by the project's Domain Vocabulary (PROJECT.md §4) and locale, not by this skill.
 
-- Brand: real brand list (Toyota, Honda, Hyundai, Kia, Peugeot…) — never a person's name.
-- Model: coherent with the brand (Toyota → Corolla/Hilux; never "Toyota Civic").
-- Type: coherent with the model (a Corolla is not a bus).
-- Year: 2010–current year. Plate: local format. Seats: coherent with vehicle type.
-- Person names / emails / phones: only in person fields, local format (+229…).
+The general rules:
+
+- Every field draws from a pool of its own type — never a person's name in a product field, never a number in a name field.
+- Cross-field coherence: dependent fields stay coherent (a model matches its brand; an amount matches its currency and magnitude; a date falls in a plausible range for the entity).
+- Locale formats (phone, plate, ID numbers, currency) follow the project's country/locale as declared in PROJECT.md.
+- Financial/reporting projects: demo amounts must be internally consistent (debits tie to credits, lines sum to their totals) — an unbalanced demo ledger masks real calculation bugs.
+
+*Example (vehicle domain):* Brand from a real list (Toyota, Honda…), model coherent with brand (Toyota → Corolla, never "Toyota Civic"), year 2010–current, plate in local format.
 
 Verification: run the demo, open the recap, read every label/value pair asking *"would a domain human find this normal?"* One incoherence = the demo feature is broken, and it is a bug like any other (it silently corrupts all manual testing built on it).
 
@@ -122,13 +135,22 @@ Every clickable element added or modified:
 - targets a route that exists (`reverse()`/named routes in templates, never hard-coded URLs);
 - produces visible feedback (navigation, toast, state change). "I click and nothing happens" is always a bug, never a pending feature left unmarked.
 
-### Step 5 — Shell and Viewport Consistency
+### Step 5 — Computed Outputs and Exports
 
-- Empty states and single-action screens fit a mobile viewport (~380×750) without scrolling.
-- No screen mixes languages in its user-facing copy (project UI language is French: "Modifier", "En validation", "Marque" — not "Edit", "Pending", "BRAND"). Code identifiers remain English per CLAUDE.md §1.12; this rule is about UI copy only.
+For any change that produces a **computed artifact** — a report, a dashboard figure, a financial statement, a file export (PDF, Excel, CSV):
+
+1. **Empty-dataset rendering.** The artifact renders correctly for a period/scope with zero underlying data: explicit empty state or zeroed lines — never a 500, never misleading residual figures.
+2. **Internal consistency spot-check.** The artifact's own arithmetic ties: totals equal the sum of their lines; a balance sheet balances; a figure shown in two places shows the same value. This is a cheap read-and-tie check — full numerical correctness belongs to `testing-skill` (lens L1-Business Logic), but a total that doesn't tie is caught HERE, before "done".
+3. **Export smoke.** The file generates without error, is non-empty, opens in its target application, and its headline figures match the on-screen version.
+4. **A 200 with wrong numbers is a failed check.** Rendering is not correctness; this step exists because every other step would let a plausible-looking wrong report ship.
+
+### Step 6 — Shell and Viewport Consistency
+
+- Empty states and single-action screens fit the project's target viewport without scrolling (mobile-first projects: ~380×750; desktop/back-office projects: the declared minimum resolution — per PROJECT.md §2/§11).
+- No screen mixes languages in its user-facing copy; the UI language is the one declared in PROJECT.md (e.g. a French-UI project shows "Modifier", never "Edit"). Code identifiers remain English per CLAUDE.md §1.12; this rule is about UI copy only.
 - The shell (header, bottom nav, spacing) is identical across pages; a shell deviation is fixed in the shell, not patched per page (see `visual-design-skill`'s shell contract).
 
-### Step 6 — Verification Report (mandatory before "done")
+### Step 7 — Verification Report (mandatory before "done")
 
 End every task with this block, filled honestly:
 
@@ -138,11 +160,12 @@ VERIFICATION PERFORMED:
   ✅/❌ Form create-mode reset — [how]                          [or N/A]
   ✅/❌ All touched routes/clickables exercised — [list]
   ✅/❌ Demo/seed reread field by field                          [or N/A]
+  ✅/❌ Computed outputs: empty-dataset + totals tie + exports   [or N/A]
   ✅/❌ Viewport + shell + language consistency                  [or N/A]
 NOT VERIFIED (and why): [what requires a human — e.g. real camera capture, real payment]
 ```
 
-A ❌ without justification forbids declaring the task done (CLAUDE.md §1.11). What cannot be verified automatically is handed to the human as a **short, precise list** — never "please test everything".
+A ❌ without justification forbids declaring the task done (CLAUDE.md §1.11). How to encode any of these checks as durable tests is `testing-skill`'s job — this skill decides WHAT must be verified; that one decides HOW it is written. What cannot be verified automatically is handed to the human as a **short, precise list** — never "please test everything".
 
 ---
 
@@ -192,6 +215,8 @@ Fix: Step 6's block is the definition of done. No block, no done.
 - Did I click (or test) every button and link I added or touched?
 - Would a domain human find every demo value normal?
 - Does the smoke test still pass — and did I add the new routes to it?
+- Does every report/export render on an empty period, and do its totals tie?
+- Does a user without the required role get a 403 — not a 200, not a 500?
 - What exactly am I asking the human to verify, and is each item genuinely non-automatable?
 
 ---
@@ -205,8 +230,9 @@ When this skill is invoked, produce:
 3. **Form lifecycle check** (Step 2 — the five invariants, each ✅/❌/N/A)
 4. **Demo integrity check** (Step 3 — or N/A)
 5. **Clickable integrity check** (Step 4)
-6. **Shell/viewport check** (Step 5 — or N/A)
-7. **Verification report block** (Step 6 — mandatory, honest, before any "done")
+6. **Computed outputs & exports check** (Step 5 — or N/A)
+7. **Shell/viewport check** (Step 6 — or N/A)
+8. **Verification report block** (Step 7 — mandatory, honest, before any "done")
 
 ---
 
