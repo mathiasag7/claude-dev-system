@@ -35,7 +35,7 @@ console.log(JSON.stringify({
   decision: "block",
   reason:
     "RETRO GATE — this session modified code (" + touched.length + " file(s)) and no retro " +
-    "has been consigned. Before ending: read .claude/skills/retro-skill.md and run it now — " +
+    "has been consigned. Before ending: read ~/.claude/skills/retro-skill.md and run it now — " +
     "harvest H1–H5 events against the consignment bar, route each lesson to its home " +
     "(skill Lessons Learned / PROJECT.md §4-§5-§8, propose for §3-§6-§10 / skill-rules.json " +
     "keywords), max 3 entries, deduplicate, then output the retro report block. " +

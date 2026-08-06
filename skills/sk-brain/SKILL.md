@@ -11,7 +11,7 @@ argument-hint: [capability description | quick]
 ## Instructions
 
 This is a launcher. The full process lives in
-`.claude/skills/domain-brain-skill.md` — read that file completely with the
+`~/.claude/skills/domain-brain-skill.md` — read that file completely with the
 Read tool now. Do not paraphrase it from memory.
 
 ARGUMENTS: $ARGUMENTS

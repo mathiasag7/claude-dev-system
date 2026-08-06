@@ -5,7 +5,7 @@ description: Diagnose and fix bugs through systematic reproduction, root cause a
 
 ## Instructions
 
-This is a launcher. The full process lives in `.claude/skills/debugging-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
+This is a launcher. The full process lives in `~/.claude/skills/debugging-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
 
 Hard constraints from the skill:
 

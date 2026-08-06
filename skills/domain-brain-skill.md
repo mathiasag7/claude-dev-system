@@ -359,4 +359,11 @@ taxonomie du régulateur — jamais consultée avant conception.
 première question d'un déploiement réel a été « pourquoi ce n'est pas dans une
 table ? ». Toute valeur qu'un métier peut vouloir changer est CONFIGURABLE
 dès le jour 1.
+[2026-07-22] — opencrm — Capacité estimation-prédictive déjà ~80% construite ; la
+mémoire (2 semaines) était périmée et sous-estimait le construit (profitability_real
+vit dans smartcrm pas crm ; 522 credit-types CBS ; référentiel type-produit déjà
+bâti). Leçon : quand une capacité est DÉJÀ largement implémentée, cartographier le
+CODE RÉEL (agent Explore) AVANT la Phase G — sinon on génère le modèle domaine contre
+une mémoire périmée et le run devient capitalisation+validation, pas conception ex
+nihilo. Renforce Step 1 (« lire dossiers + code existant avant de générer »).
 ```

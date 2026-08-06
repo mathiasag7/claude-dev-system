@@ -5,7 +5,7 @@ description: End-of-session knowledge capture. Use at the end of any session tha
 
 ## Instructions
 
-This is a launcher. The full process lives in `.claude/skills/retro-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
+This is a launcher. The full process lives in `~/.claude/skills/retro-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
 
 Hard constraints from the skill:
 

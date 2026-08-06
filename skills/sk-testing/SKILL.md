@@ -5,7 +5,7 @@ description: Design and write tests that specify behavior, survive refactoring, 
 
 ## Instructions
 
-This is a launcher. The full process lives in `.claude/skills/testing-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
+This is a launcher. The full process lives in `~/.claude/skills/testing-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
 
 Hard constraints from the skill:
 

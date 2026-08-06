@@ -5,7 +5,7 @@ description: Audit and remediate an existing product whose design is messy, inco
 
 ## Instructions
 
-This is a launcher. The full process lives in `.claude/skills/design-audit-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
+This is a launcher. The full process lives in `~/.claude/skills/design-audit-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
 
 Hard constraints, before anything else:
 

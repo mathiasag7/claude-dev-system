@@ -2,7 +2,7 @@
   "max_suggestions_per_prompt": 2,
   "skills": {
     "domain-brain-skill": {
-      "file": ".claude/skills/domain-brain-skill.md",
+      "file": "~/.claude/skills/domain-brain-skill.md",
       "priority": 10,
       "keywords": [
         "je veux construire", "on veut construire", "nouvelle feature", "concevoir",
@@ -24,10 +24,10 @@
         "(what is|what's) the (right|best) (approach|model|abstraction)",
         "(should|can) (we|it) (be based on|rely on|generalize)"
       ],
-      "instruction": "Read .claude/skills/domain-brain-skill.md and run it BEFORE product-thinking-skill and feature-design-skill — this skill decides the conceptual model, they decide the screens and the build. Begin with Step 0 (capability + REUSE HORIZON — ask the horizon first if unstated, with a recommendation). Step 1: generate the domain model boldly from Claude's own expertise (Phase G, every claim tagged [MODEL-HIGH]/[MODEL-LOW]), then verify selectively what the design depends on (Phase V: the governing authority's actual publications via web search, real data from the user), human last — every question with a recommendation. Step 2 is a hard wait point: the invariance map (UNIVERSAL/CONFIGURABLE/LOCAL) must exist and be confirmed before any doctype, model, or code — reusable logic consumes UNIVERSAL/CONFIGURABLE only, and any value a business person could ask to change is CONFIGURABLE (table, never code). Step 4: 2–3 options, explicit criteria, ONE recommendation, decision recorded with its reopening condition — no redo loops without new information. Step 5: write or UPDATE the Dossier Métier in docs/domain/ (status DRAFT); PROJECT.md gets only a pointer line + cross-feature invariants. Step 6: submit the dossier to the domain-critic agent in a FRESH context (dossier path as ONLY input, never the conversation), resolve every challenge (source / reasoning written into the dossier / conceded), 2 rounds max, then mark the dossier VALIDÉ. Step 7: present the Proposition in sponsor language (how it works, chosen approach and why, constraints, admin impact, 2–3 arbitration points with recommendations) — never on a DRAFT dossier, never jump from here to code."
+      "instruction": "Read ~/.claude/skills/domain-brain-skill.md and run it BEFORE product-thinking-skill and feature-design-skill — this skill decides the conceptual model, they decide the screens and the build. Begin with Step 0 (capability + REUSE HORIZON — ask the horizon first if unstated, with a recommendation). Step 1: generate the domain model boldly from Claude's own expertise (Phase G, every claim tagged [MODEL-HIGH]/[MODEL-LOW]), then verify selectively what the design depends on (Phase V: the governing authority's actual publications via web search, real data from the user), human last — every question with a recommendation. Step 2 is a hard wait point: the invariance map (UNIVERSAL/CONFIGURABLE/LOCAL) must exist and be confirmed before any doctype, model, or code — reusable logic consumes UNIVERSAL/CONFIGURABLE only, and any value a business person could ask to change is CONFIGURABLE (table, never code). Step 4: 2–3 options, explicit criteria, ONE recommendation, decision recorded with its reopening condition — no redo loops without new information. Step 5: write or UPDATE the Dossier Métier in docs/domain/ (status DRAFT); PROJECT.md gets only a pointer line + cross-feature invariants. Step 6: submit the dossier to the domain-critic agent in a FRESH context (dossier path as ONLY input, never the conversation), resolve every challenge (source / reasoning written into the dossier / conceded), 2 rounds max, then mark the dossier VALIDÉ. Step 7: present the Proposition in sponsor language (how it works, chosen approach and why, constraints, admin impact, 2–3 arbitration points with recommendations) — never on a DRAFT dossier, never jump from here to code."
     },
     "product-thinking-skill": {
-      "file": ".claude/skills/product-thinking-skill.md",
+      "file": "~/.claude/skills/product-thinking-skill.md",
       "priority": 9,
       "keywords": [
         "field",
@@ -74,10 +74,10 @@
         "(champ|liste|menu|sélecteur)\\s.{0,30}(pour|qui (indique|permet|affiche))",
         "(selon|en fonction de|dépend(ant)? d[eu]).{0,30}(la valeur|le type|le statut|la catégorie)"
       ],
-      "instruction": "Read .claude/skills/product-thinking-skill.md BEFORE feature-design-skill, frontend-ui-skill, or frontend-ux-skill. There is no fast exit for size — a single field or a single new enum value is exactly the case this skill exists for. Begin with Step 0 (surface + persona from PROJECT.md + the UNDERLYING NEED in one sentence — if the request is not the simplest answer to that need, surface the alternative in Step 4 as an option, never silently). Step 1: simulate the finished product (what the persona needs to know/do, and whether this field's value changes what else should appear, be required, or be editable). Step 2: RESOLVE FIRST from PROJECT.md and existing code, then ask only the residual — every asked question must carry a recommended answer with a one-line rationale so the human can reply 'ok'. Step 4: for field/enum/model changes run the bounded Impact Scan (mechanical grep, capped inventory — never a speculative essay), then present the gap analysis (literal request vs. finished-product version) explicitly before building either — per CLAUDE.md §1.8, never expand or shrink scope silently. If a [MODE OVERRIDE] block was injected with this prompt, it is authoritative for the Impact Scan (no-scan = skip 4a; full-scan = uncapped); it never skips Steps 0-2."
+      "instruction": "Read ~/.claude/skills/product-thinking-skill.md BEFORE feature-design-skill, frontend-ui-skill, or frontend-ux-skill. There is no fast exit for size — a single field or a single new enum value is exactly the case this skill exists for. Begin with Step 0 (surface + persona from PROJECT.md + the UNDERLYING NEED in one sentence — if the request is not the simplest answer to that need, surface the alternative in Step 4 as an option, never silently). Step 1: simulate the finished product (what the persona needs to know/do, and whether this field's value changes what else should appear, be required, or be editable). Step 2: RESOLVE FIRST from PROJECT.md and existing code, then ask only the residual — every asked question must carry a recommended answer with a one-line rationale so the human can reply 'ok'. Step 4: for field/enum/model changes run the bounded Impact Scan (mechanical grep, capped inventory — never a speculative essay), then present the gap analysis (literal request vs. finished-product version) explicitly before building either — per CLAUDE.md §1.8, never expand or shrink scope silently. If a [MODE OVERRIDE] block was injected with this prompt, it is authoritative for the Impact Scan (no-scan = skip 4a; full-scan = uncapped); it never skips Steps 0-2."
     },
     "debugging-skill": {
-      "file": ".claude/skills/debugging-skill.md",
+      "file": "~/.claude/skills/debugging-skill.md",
       "priority": 10,
       "keywords": [
         "bug",
@@ -104,10 +104,10 @@
         "(fix|debug|investigate|diagnose).{0,40}(bug|issue|error|problem|crash)",
         "why (is|does|do|isn'?t|doesn'?t).{0,60}(fail|break|crash|wrong|error)"
       ],
-      "instruction": "Read .claude/skills/debugging-skill.md before writing any fix. Begin with the Step 0 bug statement block (OBSERVED / EXPECTED / TRIGGER / FREQUENCY / FIRST SEEN / SCOPE). Reproduce before investigating. No fix without a regression test."
+      "instruction": "Read ~/.claude/skills/debugging-skill.md before writing any fix. Begin with the Step 0 bug statement block (OBSERVED / EXPECTED / TRIGGER / FREQUENCY / FIRST SEEN / SCOPE). Reproduce before investigating. No fix without a regression test."
     },
     "testing-skill": {
-      "file": ".claude/skills/testing-skill.md",
+      "file": "~/.claude/skills/testing-skill.md",
       "priority": 8,
       "keywords": [
         "test",
@@ -129,10 +129,10 @@
         "(write|add|review|fix|improve).{0,30}tests?",
         "tests? (are|is|keeps?).{0,30}(fail|break|flak)"
       ],
-      "instruction": "Read .claude/skills/testing-skill.md before writing any test. Begin with the Step 0 behavior specification (GIVEN / WHEN / THEN / NOT). Specify behavior, not implementation. In financial/batch contexts, lenses L1 and L3 (business logic, concurrency/idempotency) are forced."
+      "instruction": "Read ~/.claude/skills/testing-skill.md before writing any test. Begin with the Step 0 behavior specification (GIVEN / WHEN / THEN / NOT). Specify behavior, not implementation. In financial/batch contexts, lenses L1 and L3 (business logic, concurrency/idempotency) are forced."
     },
     "backend-skill": {
-      "file": ".claude/skills/backend-skill.md",
+      "file": "~/.claude/skills/backend-skill.md",
       "priority": 7,
       "keywords": [
         "endpoint",
@@ -159,10 +159,10 @@
         "(implement|add|create|build|modify|change).{0,50}(endpoint|api|route|job|worker|service|business (rule|logic)|calculation|state)",
         "(approve|cancel|close|activate|disburse|settle).{0,40}(flow|logic|process)"
       ],
-      "instruction": "Read .claude/skills/backend-skill.md before implementing. Begin with the Step 0 operation block (OPERATION / INPUT / OUTPUT / FAILURE / SIDE EFFECTS). If FAILURE or SIDE EFFECTS would be empty for a non-trivial operation, stop and investigate first."
+      "instruction": "Read ~/.claude/skills/backend-skill.md before implementing. Begin with the Step 0 operation block (OPERATION / INPUT / OUTPUT / FAILURE / SIDE EFFECTS). If FAILURE or SIDE EFFECTS would be empty for a non-trivial operation, stop and investigate first."
     },
     "frontend-ui-skill": {
-      "file": ".claude/skills/frontend-ui-skill.md",
+      "file": "~/.claude/skills/frontend-ui-skill.md",
       "priority": 6,
       "keywords": [
         "component",
@@ -188,10 +188,10 @@
         "(build|create|add|implement|modify|update).{0,40}(component|screen|page|view|modal|widget|layout)",
         "(style|restyle|theme).{0,40}(page|component|screen|app)"
       ],
-      "instruction": "Read .claude/skills/frontend-ui-skill.md before building. Begin with the Step 0 component contract (COMPONENT / INPUT / OUTPUT / STATES / VARIANTS) and the state matrix. A component whose only state is 'success' is not ready to implement."
+      "instruction": "Read ~/.claude/skills/frontend-ui-skill.md before building. Begin with the Step 0 component contract (COMPONENT / INPUT / OUTPUT / STATES / VARIANTS) and the state matrix. A component whose only state is 'success' is not ready to implement."
     },
     "frontend-ux-skill": {
-      "file": ".claude/skills/frontend-ux-skill.md",
+      "file": "~/.claude/skills/frontend-ux-skill.md",
       "priority": 6,
       "keywords": [
         "flow",
@@ -214,10 +214,10 @@
         "(design|build|improve|rework|create).{0,40}(flow|form|wizard|journey|signup|checkout|onboarding)",
         "users? (can'?t|cannot|struggle|get stuck|confused|abandon)"
       ],
-      "instruction": "Read .claude/skills/frontend-ux-skill.md before designing. Begin with the Step 0 task definition (USER GOAL / START STATE / END STATE / FAILURE MODES / USER TYPE). If FAILURE MODES is empty, stop — name them before designing the happy path."
+      "instruction": "Read ~/.claude/skills/frontend-ux-skill.md before designing. Begin with the Step 0 task definition (USER GOAL / START STATE / END STATE / FAILURE MODES / USER TYPE). If FAILURE MODES is empty, stop — name them before designing the happy path."
     },
     "visual-design-skill": {
-      "file": ".claude/skills/visual-design-skill.md",
+      "file": "~/.claude/skills/visual-design-skill.md",
       "priority": 7,
       "keywords": [
         "maquette",
@@ -247,10 +247,10 @@
         "(évolution|evolve|update|faire évoluer).{0,30}(design system|identité visuelle|visual identity|art direction)",
         "(header|shell|layout).{0,40}(manque|missing|disparu|absent|incohéren|inconsistent).{0,30}(page|screen|écran)"
       ],
-      "instruction": "Read .claude/skills/visual-design-skill.md BEFORE frontend-ui-skill — this skill decides what the screen LOOKS like; frontend-ui implements it afterwards. Begin by reading .claude/design/SHELL-CONTRACT.md and .claude/design/DESIGN-SYSTEM.md in full (Bootstrap rule if absent). Every mockup must honor the shell contract and reuse the canvas component library — designing visuals directly in code, skipping the design memory, is the failure mode this skill exists to prevent. Art direction (Step on visual identity) triggers ONLY on bootstrap or an explicit repositioning request; otherwise hold the established direction. Distinguish from design-audit-skill: audit = remediation of an inconsistent EXISTING design across pages; visual-design = designing or evolving what a screen should look like. If the request is really a whole-app inconsistency cleanup, hand over to design-audit-skill and say so."
+      "instruction": "Read ~/.claude/skills/visual-design-skill.md BEFORE frontend-ui-skill — this skill decides what the screen LOOKS like; frontend-ui implements it afterwards. Begin by reading .claude/design/SHELL-CONTRACT.md and .claude/design/DESIGN-SYSTEM.md in full (Bootstrap rule if absent). Every mockup must honor the shell contract and reuse the canvas component library — designing visuals directly in code, skipping the design memory, is the failure mode this skill exists to prevent. Art direction (Step on visual identity) triggers ONLY on bootstrap or an explicit repositioning request; otherwise hold the established direction. Distinguish from design-audit-skill: audit = remediation of an inconsistent EXISTING design across pages; visual-design = designing or evolving what a screen should look like. If the request is really a whole-app inconsistency cleanup, hand over to design-audit-skill and say so."
     },
     "feature-design-skill": {
-      "file": ".claude/skills/feature-design-skill.md",
+      "file": "~/.claude/skills/feature-design-skill.md",
       "priority": 5,
       "keywords": [
         "new feature",
@@ -267,10 +267,10 @@
         "(design|plan|spec|think through|propose).{0,40}(feature|functionality|capability)",
         "(add|build|implement) (a|the) new .{0,40}(feature|module|capability)"
       ],
-      "instruction": "Read .claude/skills/feature-design-skill.md before making any implementation decision. Research the existing codebase first; per CLAUDE.md 1.1, a proposal made without reading the existing code is a guess."
+      "instruction": "Read ~/.claude/skills/feature-design-skill.md before making any implementation decision. Research the existing codebase first; per CLAUDE.md 1.1, a proposal made without reading the existing code is a guess."
     },
     "architecture-refactoring-skill": {
-      "file": ".claude/skills/architecture-refactoring-skill.md",
+      "file": "~/.claude/skills/architecture-refactoring-skill.md",
       "priority": 5,
       "keywords": [
         "refactor",
@@ -293,10 +293,10 @@
         "(refactor|restructure|migrate|decouple|extract|modulariz).{0,60}",
         "(reduce|pay down|address).{0,30}(debt|coupling|duplication)"
       ],
-      "instruction": "Read .claude/skills/architecture-refactoring-skill.md before changing any structure. Behavior must be pinned by tests before the refactor begins. Refactoring without a safety net is rewriting."
+      "instruction": "Read ~/.claude/skills/architecture-refactoring-skill.md before changing any structure. Behavior must be pinned by tests before the refactor begins. Refactoring without a safety net is rewriting."
     },
     "design-audit-skill": {
-      "file": ".claude/skills/design-audit-skill.md",
+      "file": "~/.claude/skills/design-audit-skill.md",
       "priority": 9,
       "keywords": [
         "messy design",
@@ -321,10 +321,10 @@
         "(design|ui|visual).{0,40}(debt|audit|cleanup|clean.?up|remediation)",
         "(inconsistent|messy|ugly|outdated).{0,40}(design|ui|styles?|pages?|screens?)"
       ],
-      "instruction": "Read .claude/skills/design-audit-skill.md. This is remediation work, not new-build work — do NOT start restyling pages. Begin with Phase 0 (establish visual access) and Phase 1 (inventory). No page is modified before the canonical system is confirmed by the human."
+      "instruction": "Read ~/.claude/skills/design-audit-skill.md. This is remediation work, not new-build work — do NOT start restyling pages. Begin with Phase 0 (establish visual access) and Phase 1 (inventory). No page is modified before the canonical system is confirmed by the human."
     },
     "qa-selfcheck-skill": {
-      "file": ".claude/skills/qa-selfcheck-skill.md",
+      "file": "~/.claude/skills/qa-selfcheck-skill.md",
       "priority": 8,
       "keywords": [
         "smoke test",
@@ -367,10 +367,10 @@
         "(démo|demo|seed|fixture).{0,40}(incohéren|absurde|faux|wrong|fake|incoherent)",
         "(vérifie|teste|contrôle).{0,40}(que tout|l'?app|les routes|le parcours|le flux)"
       ],
-      "instruction": "Read .claude/skills/qa-selfcheck-skill.md before declaring any implementation task done. This skill runs LAST, after backend/frontend/debugging skills. Begin with the Step 0 impact surface block (ROUTES / FORMS / CLICKABLES / DATA ASSUMED — every assumed object must be guaranteed or handled). Step 1 fresh-user pass is non-negotiable and has three sub-passes (GET smoke, mutation smoke, authorization pass — forced in regulated/financial projects): exercise the flow as a newly created empty account and keep the NewUserSmokeTest green — a failing route is fixed in the view, never hidden in the exclusion set. Verify the five form-lifecycle invariants (create-mode reset, edit≠create, dual back semantics, draft, per-step validation), demo/seed plausibility field by field, every touched clickable, and — for any report, computed figure, or export — Step 5 (empty-dataset rendering, totals tie, export smoke: a 200 with wrong numbers is a failed check). End with the Step 7 verification report block filled honestly, per CLAUDE.md §1.11 — no block, no done. Anything non-automatable is handed to the human as a short precise list, never 'test everything'."
+      "instruction": "Read ~/.claude/skills/qa-selfcheck-skill.md before declaring any implementation task done. This skill runs LAST, after backend/frontend/debugging skills. Begin with the Step 0 impact surface block (ROUTES / FORMS / CLICKABLES / DATA ASSUMED — every assumed object must be guaranteed or handled). Step 1 fresh-user pass is non-negotiable and has three sub-passes (GET smoke, mutation smoke, authorization pass — forced in regulated/financial projects): exercise the flow as a newly created empty account and keep the NewUserSmokeTest green — a failing route is fixed in the view, never hidden in the exclusion set. Verify the five form-lifecycle invariants (create-mode reset, edit≠create, dual back semantics, draft, per-step validation), demo/seed plausibility field by field, every touched clickable, and — for any report, computed figure, or export — Step 5 (empty-dataset rendering, totals tie, export smoke: a 200 with wrong numbers is a failed check). End with the Step 7 verification report block filled honestly, per CLAUDE.md §1.11 — no block, no done. Anything non-automatable is handed to the human as a short precise list, never 'test everything'."
     },
     "retro-skill": {
-      "file": ".claude/skills/retro-skill.md",
+      "file": "~/.claude/skills/retro-skill.md",
       "priority": 4,
       "keywords": [
         "retro",
@@ -394,10 +394,10 @@
         "(what|qu'?).{0,20}(did we|est-ce qu'?on|avons[- ]nous).{0,20}(learn|appris|retien)",
         "(consign|capture|log|note).{0,30}(lesson|leçon|apprentissage)"
       ],
-      "instruction": "Read .claude/skills/retro-skill.md. Harvest only H1–H5 events tested against the consignment bar (would it change next session's behavior?). Route each lesson to its single home per the routing table — skill Lessons Learned, PROJECT.md §4/§5/§8, skill-rules.json keywords — and only PROPOSE entries for PROJECT.md §3/§6/§10 unless the human validated them in-session. Deduplicate (annotate recurrences, escalate to amending the failing skill step), cap at 3 written entries, end with the retro report block, then write .claude/.cache/retro/<session_id> so the Stop gate does not re-fire. An empty retro is one line: 'Retro: nothing meets the consignment bar.'"
+      "instruction": "Read ~/.claude/skills/retro-skill.md. Harvest only H1–H5 events tested against the consignment bar (would it change next session's behavior?). Route each lesson to its single home per the routing table — skill Lessons Learned, PROJECT.md §4/§5/§8, skill-rules.json keywords — and only PROPOSE entries for PROJECT.md §3/§6/§10 unless the human validated them in-session. Deduplicate (annotate recurrences, escalate to amending the failing skill step), cap at 3 written entries, end with the retro report block, then write .claude/.cache/retro/<session_id> so the Stop gate does not re-fire. An empty retro is one line: 'Retro: nothing meets the consignment bar.'"
     },
     "project-onboarding-skill": {
-      "file": ".claude/skills/project-onboarding-skill.md",
+      "file": "~/.claude/skills/project-onboarding-skill.md",
       "priority": 9,
       "keywords": [
         "new project",
@@ -411,7 +411,7 @@
       "patterns": [
         "(initialize|init|set ?up|bootstrap).{0,30}(project|context|project\\.md)"
       ],
-      "instruction": "Read .claude/skills/project-onboarding-skill.md. Determine greenfield vs existing first. For existing projects: read the codebase and build the inference map BEFORE asking the human anything."
+      "instruction": "Read ~/.claude/skills/project-onboarding-skill.md. Determine greenfield vs existing first. For existing projects: read the codebase and build the inference map BEFORE asking the human anything."
     }
   }
 }

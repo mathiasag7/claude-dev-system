@@ -5,7 +5,7 @@ description: Design a new feature before any implementation decision is made. Us
 
 ## Instructions
 
-This is a launcher. The full process lives in `.claude/skills/feature-design-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory. Follow its process exactly: its Steps, its verification blocks, its escalation rules, and its Output Format, including any items it marks as non-skippable.
+This is a launcher. The full process lives in `~/.claude/skills/feature-design-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory. Follow its process exactly: its Steps, its verification blocks, its escalation rules, and its Output Format, including any items it marks as non-skippable.
 
 Universal constraints that apply regardless (from CLAUDE.md):
 

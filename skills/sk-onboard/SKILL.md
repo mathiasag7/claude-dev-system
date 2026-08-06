@@ -9,7 +9,7 @@ description: Initialize or repair PROJECT.md by running the project onboarding p
 
 ## Instructions
 
-This is a launcher. The full process lives in `.claude/skills/project-onboarding-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
+This is a launcher. The full process lives in `~/.claude/skills/project-onboarding-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
 
 Then execute it exactly:
 

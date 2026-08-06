@@ -52,7 +52,7 @@ if [[ -n "$problem" ]]; then
 $problem
 
 Before ANY development task in this session:
-1. Read .claude/skills/project-onboarding-skill.md and run it.
+1. Read ~/.claude/skills/project-onboarding-skill.md and run it.
 2. Determine greenfield vs existing. For existing projects, read the codebase
    and build the inference map BEFORE asking the human anything.
 3. Produce a complete PROJECT.md (including Active Quality Lenses) and present

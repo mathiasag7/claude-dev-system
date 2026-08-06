@@ -5,7 +5,7 @@ description: Design visual mockups/maquettes, art direction, and design-system e
 
 ## Instructions
 
-This is a launcher. The full process lives in `.claude/skills/visual-design-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
+This is a launcher. The full process lives in `~/.claude/skills/visual-design-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
 
 Hard constraints, before anything else:
 

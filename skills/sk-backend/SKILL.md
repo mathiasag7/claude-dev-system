@@ -5,7 +5,7 @@ description: Implement backend logic with rigorous attention to robustness, erro
 
 ## Instructions
 
-This is a launcher. The full process lives in `.claude/skills/backend-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
+This is a launcher. The full process lives in `~/.claude/skills/backend-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
 
 Hard constraints from the skill:
 

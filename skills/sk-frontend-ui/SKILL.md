@@ -5,7 +5,7 @@ description: Build and modify UI components and screens with complete state cove
 
 ## Instructions
 
-This is a launcher. The full process lives in `.claude/skills/frontend-ui-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
+This is a launcher. The full process lives in `~/.claude/skills/frontend-ui-skill.md` — read that file completely with the Read tool now. Do not paraphrase it from memory.
 
 Hard constraints from the skill:
 
